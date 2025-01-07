@@ -15,7 +15,7 @@ constexpr int LUT_SIZE = 16;
 constexpr int VECTOR_SIZE = 256 / 8; // 256-bit vector, 32 elements for 8-bit
 constexpr size_t NUM_ELEMENTS = 32;
 
-const int8_t predefined_weights[4] = {-1, 0, 1, 2}; // {0, 1, 2, 3};
+const int8_t predefined_weights[4] = {-1, 0, 1, 2};
 const int8_t predefined_activations[4] = {0, 1, 2, 3};
 
 void generateRandomData(uint8_t* activations, uint8_t* weights) {
@@ -32,8 +32,8 @@ void generateRandomData(uint8_t* activations, uint8_t* weights) {
 
     // fill in weight and activation arrays
     for (size_t i = 0; i < NUM_ELEMENTS; ++i) {
-        activations[i] = values[activation_dist(gen)];                  // generate 0~255 randomly
-        weights[i] = values[weight_dist(gen)];           // select 0, 85, 170, 255 randomly
+        activations[i] = values[activation_dist(gen)]; // generate 0~255 randomly
+        weights[i] = values[weight_dist(gen)]; // generate 0~255 randomly
     }
 }
 
@@ -69,7 +69,7 @@ int32_t deepgemmAVX2(const uint8_t* activations, const uint8_t* weights, size_t 
     }
     std::cout << std::endl;
 
-    __m256i result = _mm256_setzero_si256(); // Accumulator for results
+    __m256i result = _mm256_setzero_si256(); // accumulator for results
 
     for (size_t i = 0; i < length; i += VECTOR_SIZE) {
         // load activations and weights
@@ -163,9 +163,6 @@ int main() {
         std::cout << static_cast<int>(weights[i]) << " ";
     }
     std::cout << std::endl;
-    
-
-    // naive(activations, weights);
 
     int32_t result = deepgemmAVX2(activations, weights, NUM_ELEMENTS);
 
